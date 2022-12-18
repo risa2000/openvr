@@ -1,5 +1,5 @@
 # Set the minimum required version of CMake for this project.
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.15)
 
 # Set project name.
 project(OpenVRSDK)
@@ -22,7 +22,7 @@ string(REGEX REPLACE "${VERSION_BUILD_REGEX}" "\\1" VERSION_BUILD ${VERSION_BUIL
 set(OPENVR_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}")
 
 # Setup some options.
-option(BUILD_SHARED "Builds the library as shared library" OFF)
+option(BUILD_SHARED_LIBS "Builds the library as shared library" OFF)
 option(BUILD_FRAMEWORK "Builds the library as an apple Framework" OFF)
 option(BUILD_UNIVERSAL "Builds the shared or framework as a universal (fat, 32- & 64-bit) binary" ON)
 option(BUILD_OSX_I386 "Builds the shared or framework as a 32-bit binary, even on a 64-bit platform" OFF)
@@ -30,6 +30,8 @@ option(USE_LIBCXX "Uses libc++ instead of libstdc++" ON)
 option(USE_CUSTOM_LIBCXX "Uses a custom libc++" OFF)
 
 add_definitions( -DVR_API_PUBLIC )
+
+set (CMAKE_DEBUG_POSTFIX d)
 
 # Check if 32 or 64 bit system.
 set(SIZEOF_VOIDP ${CMAKE_SIZEOF_VOID_P})
@@ -42,7 +44,7 @@ endif()
 # Get platform.
 if(WIN32)
   set(PLATFORM_NAME "win")
-  if(NOT BUILD_SHARED)
+  if(NOT BUILD_SHARED_LIBS)
     add_definitions(-DOPENVR_BUILD_STATIC)
   endif()
 elseif(UNIX AND NOT APPLE)
@@ -70,9 +72,9 @@ elseif(APPLE)
 endif()
 
 # Set output folder for static and shared libraries
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PLATFORM_NAME}${PROCESSOR_ARCH})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PLATFORM_NAME}${PROCESSOR_ARCH})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PLATFORM_NAME}${PROCESSOR_ARCH})
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PLATFORM_NAME}${PROCESSOR_ARCH})
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PLATFORM_NAME}${PROCESSOR_ARCH})
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PLATFORM_NAME}${PROCESSOR_ARCH})
 
 # Enable some properties.
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
@@ -82,7 +84,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
 	# Set custom libc++ usage here
 	if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND USE_LIBCXX)
 		if(USE_CUSTOM_LIBCXX)
-			if(BUILD_SHARED)
+			if(BUILD_SHARED_LIBS)
 				set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++")
 			endif()
 			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdinc++")
