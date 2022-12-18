@@ -10,11 +10,11 @@ if(APPLE)
   if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
     set_source_files_properties(vrcore/pathtools_public.cpp vrcore/vrpathregistry_public.cpp PROPERTIES COMPILE_FLAGS "-x objective-c++")
   endif()
-  if(BUILD_SHARED OR BUILD_FRAMEWORK)
+  if(BUILD_SHARED_LIBS OR BUILD_FRAMEWORK)
     find_library(FOUNDATION_FRAMEWORK Foundation)
     mark_as_advanced(FOUNDATION_FRAMEWORK)
     set(EXTRA_LIBS ${EXTRA_LIBS} ${FOUNDATION_FRAMEWORK})
-  endif(BUILD_SHARED OR BUILD_FRAMEWORK)
+  endif(BUILD_SHARED_LIBS OR BUILD_FRAMEWORK)
 elseif(WIN32)
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_definitions( -DWIN64 )
@@ -68,7 +68,7 @@ source_group("VRCore" FILES
 )
 
 # Build the library.
-if(BUILD_SHARED)
+if(BUILD_SHARED_LIBS)
 	add_library(${LIBNAME} SHARED ${SOURCE_FILES})
 elseif(BUILD_FRAMEWORK)
 	set( LIBNAME "OpenVR" )
@@ -103,7 +103,12 @@ endif()
 target_link_libraries(${LIBNAME} ${EXTRA_LIBS} ${CMAKE_DL_LIBS})
 target_include_directories(${LIBNAME} PUBLIC ${OPENVR_HEADER_DIR})
 
-install(TARGETS ${LIBNAME} DESTINATION lib)
+install(TARGETS ${LIBNAME}
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+	)
+
 install(FILES ${PUBLIC_HEADER_FILES} DESTINATION include/openvr)
 
 # Generate a .pc file for linux environments

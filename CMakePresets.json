@@ -1,0 +1,177 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "arch_x64",
+      "hidden": true,
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      }
+    },
+    {
+      "name": "arch_x86",
+      "hidden": true,
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      }
+    },
+    {
+      "name": "generic-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "cacheVariables": {
+        "CMAKE_POLICY_DEFAULT_CMP0091": "NEW",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "CMAKE_CXX_STANDARD": "17",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
+      }
+    },
+    {
+      "name": "clang-cl",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang-cl.exe",
+        "CMAKE_CXX_COMPILER": "clang-cl.exe"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "shared_libs",
+      "hidden": true,
+      "cacheVariables": {
+        "BUILD_SHARED_LIBS": "ON"
+      }
+    },
+    {
+      "name": "x64_DLL_Debug",
+      "displayName": "x64_DLL_Debug",
+      "inherits": ["generic-base", "arch_x64", "shared_libs"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "x64_DLL_Release",
+      "displayName": "x64_DLL_Release",
+      "inherits": ["generic-base", "arch_x64", "shared_libs"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "x64_Lib_Debug",
+      "displayName": "x64_Lib_Debug",
+      "inherits": ["generic-base", "arch_x64"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "x64_Lib_Release",
+      "displayName": "x64_Lib_Release",
+      "inherits": ["generic-base", "arch_x64"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "x86_DLL_Debug",
+      "displayName": "x86_DLL_Debug",
+      "inherits": ["generic-base", "arch_x86", "shared_libs"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "x86_DLL_Release",
+      "displayName": "x86_DLL_Release",
+      "inherits": ["generic-base", "arch_x86", "shared_libs"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "x86_Lib_Debug",
+      "displayName": "x86_Lib_Debug",
+      "inherits": ["generic-base", "arch_x86"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "x86_Lib_Release",
+      "displayName": "x86_Lib_Release",
+      "inherits": ["generic-base", "arch_x86"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "x64_DLL_Debug_xClangCl",
+      "displayName": "x64_DLL_Debug_xClangCl",
+      "inherits": ["generic-base", "arch_x64", "shared_libs"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "x64_DLL_Release_xClangCl",
+      "displayName": "x64_DLL_Release_xClangCl",
+      "inherits": ["generic-base", "arch_x64", "shared_libs"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "x64_DLL_Debug",
+      "configurePreset": "x64_DLL_Debug"
+    },
+    {
+      "name": "x64_DLL_Release",
+      "configurePreset": "x64_DLL_Release"
+    },
+    {
+      "name": "x64_Lib_Debug",
+      "configurePreset": "x64_Lib_Debug"
+    },
+    {
+      "name": "x64_Lib_Release",
+      "configurePreset": "x64_Lib_Release"
+    },
+    {
+      "name": "x86_DLL_Debug",
+      "configurePreset": "x86_DLL_Debug"
+    },
+    {
+      "name": "x86_DLL_Release",
+      "configurePreset": "x86_DLL_Release"
+    },
+    {
+      "name": "x86_Lib_Debug",
+      "configurePreset": "x86_Lib_Debug"
+    },
+    {
+      "name": "x86_Lib_Release",
+      "configurePreset": "x86_Lib_Release"
+    },
+    {
+      "name": "x64_DLL_Debug_xClangCl",
+      "configurePreset": "x64_DLL_Debug_xClangCl"
+    },
+    {
+      "name": "x64_DLL_Release_xClangCl",
+      "configurePreset": "x64_DLL_Release_xClangCl"
+    }
+  ]
+}
